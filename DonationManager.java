@@ -8,15 +8,17 @@ public class DonationManager implements DonationManageInterface{
 	/**
 	 * Class fields 
 	 */
-	VolunteerLine volLine= new VolunteerLine();
-	RecipientLine recLine = new RecipientLine();
-	Container cont = new Container();
-	Volunteer vol;
-	Recipient recip;
-	DonationPackage dP;
+	private VolunteerLine volLine;//= new VolunteerLine();
+	private RecipientLine recLine = new RecipientLine();
+	private Container cont = new Container();
+	private Volunteer reQueueVol;
+	private Recipient recip;
+	private DonationPackage dP;
 	
 	public DonationManager() {
-		
+		volLine= new VolunteerLine();
+		recLine = new RecipientLine();
+		cont = new Container();
 	}
 	/**Method to stack a new  package in to container
 	 * @param dPackage Donation package stacked in to the container
@@ -26,13 +28,12 @@ public class DonationManager implements DonationManageInterface{
 	@Override
 	public boolean managerLoadContainer(DonationPackage dPackage) throws ContainerException {
 		
-		try {
-			cont.loadContainer(dPackage);
+		if(cont.loadContainer(dPackage)) {
+			return true;
 		}
-		catch(ContainerException e) {
-			e.getMessage();
+		else{
+			throw new ContainerException("Container is full");
 		}
-		return true;
 	}
 	/**
 	 * adds a new Volunteer to the volunteer line Queue
@@ -43,13 +44,12 @@ public class DonationManager implements DonationManageInterface{
 	@Override
 	public boolean managerQueueVolunteer(Volunteer v) throws VolunteerException {
 		
-		try {
-			volLine.addNewVolunteer(v);
+		
+		if(volLine.addNewVolunteer(v))
+			return true;
 
-		}catch(VolunteerException e) {
-			e.getMessage();
-		}
-		return true;
+		else
+			throw new VolunteerException("Volunteer Line is full"); 
 	}
 	/**
 	 * adds a new Recipient to the queue of the Recipient line
@@ -59,13 +59,12 @@ public class DonationManager implements DonationManageInterface{
 	 */
 	@Override
 	public boolean managerQueueRecipient(Recipient r) throws RecipientException {
-		try {
-			recLine.addNewRecipient(r);
+		if(recLine.addNewRecipient(r)) {
+			return true;
 
-		}catch(RecipientException e) {
-			e.getMessage();
+		}else {
+			throw new RecipientException("Recipient Line is full");
 		}
-		return true;
 	}
 	/**
 	 * Donates package from container by the volunteer  to the 
@@ -78,25 +77,27 @@ public class DonationManager implements DonationManageInterface{
 	 */
 	@Override
 	public int donatePackage() throws VolunteerException, ContainerException, RecipientException {
-		
-		if(volLine.volunteerLineEmpty())
+		int returnValue = 0;
+		if(volLine.volunteerLineEmpty()) {
+			returnValue =  1;
 			throw new VolunteerException("The Volunteer line is empty");
-		else
-			volLine.volunteerTurn();
-		
-		
-		if(recLine.recipientLineEmpty())
-			throw new RecipientException("Recipient line is empty");
-		else
-			recLine.recipientTurn();
-		
-		
-		if(cont.getSize() == 0)
+		}
+
+		else if(recLine.recipientLineEmpty()) {
+			returnValue = 2;
+			throw new RecipientException("Recipient line is empty");	
+		} 
+		else if(cont.getSize() == 0) {
+			returnValue = 3;
 			throw new ContainerException("The Container is empty");
-		else
-			cont.removePackageFromContainer();
+		}
 		
-		return 0;
+		dP = cont.removePackageFromContainer();
+		recip = recLine.recipientTurn();
+		reQueueVol = volLine.volunteerTurn();
+		volLine.addNewVolunteer(reQueueVol);
+			
+		return returnValue;
 	}
 	/**
 	 * Returns an array of DonationPackages
@@ -104,8 +105,9 @@ public class DonationManager implements DonationManageInterface{
 	 */
 	@Override
 	public DonationPackage[] managerArrayPackage() {
-		DonationPackage[] dpArray = new DonationPackage[cont.getCapacity()];
-		dpArray = cont.toArrayPackage();
+		DonationPackage[] dpArray = new DonationPackage[cont.toArrayPackage().length];
+		for(int i = 0; i < cont.toArrayPackage().length; i++)
+			dpArray[i] = cont.toArrayPackage()[i];
 		
 		return dpArray;
 	}
@@ -115,8 +117,10 @@ public class DonationManager implements DonationManageInterface{
 	 */
 	@Override
 	public Volunteer[] managerArrayVolunteer() {
-		Volunteer[] volArray = new Volunteer[volLine.getCapacity()];
-		volArray = volLine.toArrayVolunteer();
+		Volunteer[] volArray = new Volunteer[volLine.toArrayVolunteer().length];
+		for(int i = 0; i < volLine.toArrayVolunteer().length; i++) {
+			volArray[i] = volLine.toArrayVolunteer()[i];
+		}
 		
 		return volArray;
 	}
@@ -126,8 +130,9 @@ public class DonationManager implements DonationManageInterface{
 	 */
 	@Override
 	public Recipient[] managerArrayRecipient() {
-		Recipient[] recArray = new Recipient[recLine.getCapacity()];
-		recArray = recLine.toArrayRecipient();
+		Recipient[] recArray = new Recipient[recLine.toArrayRecipient().length];
+		for(int i = 0; i < recArray.length; i++)
+			recArray[i] = recLine.toArrayRecipient()[i];
 		
 		return recArray;
 	}
@@ -135,7 +140,7 @@ public class DonationManager implements DonationManageInterface{
 	 * Returns string representation of donation simulation
 	 */
 	public String toString() {
-		return vol.getName() + "donated a " + dP.getDescription() + " to " + recip.getName();
+		return reQueueVol.toString() + " donated " + dP.toString() + " to " + recip.toString();
 	}
 
 }

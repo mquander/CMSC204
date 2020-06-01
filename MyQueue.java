@@ -8,6 +8,7 @@ public class MyQueue<T> implements QueueInterface<T>{
 	/**
 	 * Class fields
 	 */
+	
 	private Node firstNode, lastNode;
 	private final int MAX_CAPACITY = 5;
 	private int size;
@@ -15,7 +16,9 @@ public class MyQueue<T> implements QueueInterface<T>{
 	 * Constructors to initialize queue
 	 * @param MAX_CAPACITY
 	 */
+	
 	public MyQueue(int MAX_CAPACITY) {
+		
 		size = 0;
 	}
 	public MyQueue() {
@@ -85,7 +88,7 @@ public class MyQueue<T> implements QueueInterface<T>{
 	 */
 	@Override
 	public boolean isFull() {
-		if(size() == getMAX_CAPACITY())
+		if(size() >= getMAX_CAPACITY())
 			return true;
 		else
 			return false;
@@ -95,7 +98,7 @@ public class MyQueue<T> implements QueueInterface<T>{
 	 */
 	@Override
 	public T dequeue() {
-		T front = firstNode.getData();
+		T front = null;
 		if(isEmpty()) {
 			firstNode = null;
 			lastNode = null;
@@ -103,12 +106,14 @@ public class MyQueue<T> implements QueueInterface<T>{
 		}
 			
 		else {
+			front = firstNode.getData();
 			firstNode.setData(null);
 			firstNode = firstNode.getNext();
+			size--;
 		}
 		if(firstNode == null)
 			lastNode = null;
-		size--;
+		
 		return front;
 	}
 	/**
@@ -125,7 +130,7 @@ public class MyQueue<T> implements QueueInterface<T>{
 	 */
 	@Override
 	public boolean enqueue(T e) {
-		if(size <= getMAX_CAPACITY()) {
+		if(size() < getMAX_CAPACITY()) {
 			Node newNode = new Node(e, null);
 			
 			if(isEmpty())
@@ -146,7 +151,6 @@ public class MyQueue<T> implements QueueInterface<T>{
 	@Override
 	public T[] toArray() {
 		
-		//@SuppressWarnings("unchecked")
 		T[] array = (T[]) new Object[getMAX_CAPACITY()];
 		Node currentNode = firstNode;
 		
@@ -157,7 +161,7 @@ public class MyQueue<T> implements QueueInterface<T>{
 			currentNode = currentNode.getNext();
 			i++;
 		}
-		return (T[]) array;
+		return  array;
 	}
 	/**
 	 * Method to get MAX_CAPACITY

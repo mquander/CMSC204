@@ -1,13 +1,14 @@
 /**
  * Class to create a Container object
  * @author Matt Quander
+ * @param <T>
  *
  */
 public class Container implements ContainerInterface{
 	/**
 	 * Container fields
 	 */
-	MyStack<DonationPackage> stack = new MyStack<DonationPackage>(5);
+	MyStack<DonationPackage> stack = new MyStack<DonationPackage>();
 	private int capacity, size = 0;
 	/**
 	 * Container constructors
@@ -15,10 +16,12 @@ public class Container implements ContainerInterface{
 	 */
 	public Container(int capacity) {
 		this.capacity = capacity;
+		stack = new MyStack<DonationPackage>();
 	}
 	
 	public Container() {
 		capacity = 5;
+		stack = new MyStack<DonationPackage>();
 	}
 	/**
 	 * Method to add donation package to Container
@@ -31,11 +34,12 @@ public class Container implements ContainerInterface{
 
 		if(stack.isFull())
 			throw new ContainerException("The Container is full");
-		else 
+		else {
 			stack.push(dPackage);
-			
-		size++;
-		return true;
+			size++;
+			return true;
+		}
+		
 	}
 	/**
 	 * Removes  a DonationPackage from container
@@ -47,8 +51,10 @@ public class Container implements ContainerInterface{
 		DonationPackage temp;
 		if(stack.isEmpty())
 			throw new ContainerException("The Container is empty");
-		else
+		else {
 			temp = stack.pop();
+			size--;
+		}
 		return temp;
 	}
 	/**
@@ -57,17 +63,15 @@ public class Container implements ContainerInterface{
 	 */
 	@Override
 	public DonationPackage[] toArrayPackage() {
-		DonationPackage dpArr[] = new DonationPackage[stack.getMAX_CAPACITY()];
-		Object tempArr[] = new Object[stack.getMAX_CAPACITY()];
 		
-		tempArr = stack.toArray();
-		
+		DonationPackage[] array = new DonationPackage[getSize()]; 
+		Object[] temp = new Object[getSize()];
+		temp = stack.toArray();
 		for(int i = 0; i < stack.size(); i++) {
-			
-			dpArr[i] = (DonationPackage)tempArr[i];
+			array[i] = (DonationPackage)temp[i];
 		}
-
-		return dpArr;
+		
+		return array;
 	}
 	/**
 	 * Method to return capacity

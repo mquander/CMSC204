@@ -7,7 +7,8 @@ public class RecipientLine implements RecipientLineInterface{
 	/**
 	 * Class fields
 	 */
-	MyQueue<Recipient> queue = new MyQueue<Recipient>();
+	MyQueue<Recipient> queue; // = new MyQueue<Recipient>();
+		
 	private int capacity;
 	private int size = 0;
 	/**
@@ -15,11 +16,15 @@ public class RecipientLine implements RecipientLineInterface{
 	 * @param capacity
 	 */
 	public RecipientLine(int capacity) {
+		queue = new MyQueue<Recipient>();
 		this.capacity = capacity;
+		
 	}
 	
 	public RecipientLine() {
+		queue = new MyQueue<Recipient>();
 		capacity = 5;
+		
 	}
 	/**
 	 * Method to add recipient to queue
@@ -44,14 +49,15 @@ public class RecipientLine implements RecipientLineInterface{
 	@Override
 	public Recipient recipientTurn() throws RecipientException {
 		Recipient temp;
+				
 		if(queue.isEmpty()) {
 			throw new RecipientException("Recipient queue is empty");
 		}
 		else {
 			temp = queue.dequeue();
+			size--;
+			return temp;
 		}
-		size--;
-		return temp;
 	}
 	/**
 	 * Method to check if line is empty
@@ -68,16 +74,16 @@ public class RecipientLine implements RecipientLineInterface{
 	 */
 	@Override
 	public Recipient[] toArrayRecipient() {
-		Recipient recArr[] = new Recipient[queue.getMAX_CAPACITY()];
-		Object tempArr[] = new Object[queue.getMAX_CAPACITY()];
 		
-		tempArr = queue.toArray();
+		Object[] tempArr = new Object[queue.size()];
+		tempArr =  queue.toArray();
 		
+		Recipient recArr[] = new Recipient[getSize()];
 		for(int i = 0; i < queue.size(); i++) {
 			
-			recArr[i] = (Recipient)tempArr[i];
+			recArr[i] = (Recipient) tempArr[i];
 		}
-
+		
 		return recArr;
 	}
 	/**

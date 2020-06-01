@@ -203,7 +203,7 @@ public class DonationMgmGui extends Application {
 			donationMgm.managerQueueVolunteer(newVolunteer); 
 			Object[] t = donationMgm.managerArrayVolunteer(); 
 			clearText(volunteers);
-			
+
 			for (int i = 0; i < t.length; i++) {
 				volunteers[volunteers.length - 1 - i]
 						.setText(((Volunteer) t[i]).toString());
@@ -270,7 +270,7 @@ public class DonationMgmGui extends Application {
 
 		}
 		tempArr = donationMgm.managerArrayVolunteer();
-
+		
 		for (int i = 0; i < tempArr.length; i++) {
 			volunteers[volunteers.length - 1 - i]
 					.setText(((Volunteer) tempArr[i]).toString());

@@ -88,18 +88,18 @@ public class DonationManagerTest {
 			
 			assertEquals(manager.donatePackage(),1 );  //Can not donate package, There are no volunteers in the queue
 			
-			manager.managerQueueVolunteer(v1);    //add a volunteer
+			manager.managerQueueVolunteer(v1);   //add a volunteer
 			assertEquals(manager.donatePackage(),2 );  // Still Can not donate package,There are no recipients in the queue
 			
 			manager.managerQueueRecipient(r1);   //Add a recipient
 			assertEquals(manager.donatePackage(),0);    // donation process should be successful, this should remove the package from
-			                                            // the container and recipients from the queue, Volunteer is enqueued again to the 
+			                                           // the container and recipients from the queue, Volunteer is enqueued again to the 
 														// Volunteer line.
 			
 			assertEquals(manager.donatePackage(),2); //There is no recipient in the queue
 			
 		} catch (ContainerException | VolunteerException | RecipientException e) {
-			 
+			  
 			e.printStackTrace();
 		}
 	 

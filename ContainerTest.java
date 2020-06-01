@@ -82,17 +82,20 @@ public class ContainerTest {
 	public void testToArrayPackage() {
 		try {
 			aContainer.loadContainer(dpk1);
+			
 		} catch (ContainerException e1) {
 			// TODO Auto-generated catch block
 			assertTrue("This should not have thrown an exception", false);
 		}
-
+		
+		
 		assertEquals(aContainer.toArrayPackage()[0].getDescription(), "Pens");
 		try {
 			aContainer.loadContainer(dpk2);
 			aContainer.loadContainer(dpk3);
 			aContainer.loadContainer(dpk4);
 			aContainer.loadContainer(dpk5);
+			
 		} catch (ContainerException e1) {
 			// TODO Auto-generated catch block
 			assertTrue("This should not have thrown an exception", false);
@@ -101,6 +104,7 @@ public class ContainerTest {
 		assertEquals(aContainer.toArrayPackage()[2].getDescription(), "Papers");
 		assertEquals(aContainer.toArrayPackage()[3].getDescription(), "Folders");
 		assertEquals(aContainer.toArrayPackage()[4].getDescription(), "Erasers");
+		
 	}
 
 }

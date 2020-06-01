@@ -7,7 +7,8 @@ public class VolunteerLine implements VolunteerLineInterface{
 	/**
 	 * Class fields
 	 */
-	MyQueue<Volunteer> queue = new MyQueue<Volunteer>();
+	MyQueue<Volunteer> queue;// = new MyQueue<Volunteer>();
+
 	private int capacity;
 	private int size = 0;
 	/**
@@ -15,10 +16,12 @@ public class VolunteerLine implements VolunteerLineInterface{
 	 * @param capacity
 	 */
 	public VolunteerLine(int capacity){
+		queue = new MyQueue<Volunteer>();
 		this.capacity = capacity;
 	}
 	
 	public VolunteerLine() {
+		queue = new MyQueue<Volunteer>();
 		capacity = 5;
 	}
 	/**
@@ -32,12 +35,12 @@ public class VolunteerLine implements VolunteerLineInterface{
 			throw new VolunteerException("Volunteer queue is full");
 			
 		}
-		else if(!queue.isFull()){
+		else {
 			queue.enqueue(v);
 			size++;
 			return true;
 		}
-		return false;
+		
 	}
 	/**
 	 * Method to remove volunteer object from queue
@@ -46,13 +49,14 @@ public class VolunteerLine implements VolunteerLineInterface{
 	@Override
 	public Volunteer volunteerTurn() throws VolunteerException {
 		Volunteer temp;
+		
 		if(queue.isEmpty()) {
 			throw new VolunteerException("Volunteer queue is empty");
 		}
 		else {
 			temp = queue.dequeue();
+			size--;	
 		}
-		size--;
 		return temp;
 	}
 	/**
@@ -70,14 +74,17 @@ public class VolunteerLine implements VolunteerLineInterface{
 	 */
 	@Override
 	public Volunteer[] toArrayVolunteer() {
-		Volunteer volArr[] = new Volunteer[queue.getMAX_CAPACITY()];
-		Object tempArr[] = new Object[queue.getMAX_CAPACITY()];
+		
+		Volunteer volArr[] = new Volunteer[getSize()];
+		
+		Object tempArr[] = new Object[getSize()];
 		tempArr = queue.toArray();
 		
 		for(int i = 0; i < queue.size(); i++) {
 			
-			volArr[i] = (Volunteer)tempArr[i];
+			volArr[i] = (Volunteer) tempArr[i];
 		}
+		
 
 		return volArr;
 	}

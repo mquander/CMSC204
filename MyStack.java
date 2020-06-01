@@ -16,6 +16,8 @@ public class MyStack<T> implements StackInterface<T> {
 	 * @param MAX_CAPACITY
 	 */
 	public MyStack(int MAX_CAPACITY) {
+		topNode = null;
+		bottomNode = null;
 		size = 0;
 	}
 	/**
@@ -90,7 +92,7 @@ public class MyStack<T> implements StackInterface<T> {
 	@Override
 	public boolean isFull() {
 		
-		if(size() >= MAX_CAPACITY)
+		if(size() == MAX_CAPACITY)
 			return true;
 		else
 			return false;
@@ -112,9 +114,9 @@ public class MyStack<T> implements StackInterface<T> {
 			top = topNode.getData();
 			topNode.setData(null);
 			topNode = topNode.getNext();
-			
+			size--;
 		}
-		size--;
+		
 		return top;
 	}
 	/**
@@ -131,13 +133,14 @@ public class MyStack<T> implements StackInterface<T> {
 	@Override
 	public boolean push(T e) {
 		if(isEmpty()) {
-			
-			topNode = new Node(e, null);;
+			Node newNode = new Node(e, null);
+			topNode = newNode;
 			size++;
 			return true;
 		}
 		else if(!isFull()) {
-			topNode = new Node(e, topNode);
+			Node newNode = new Node(e, topNode);
+			topNode = newNode;
 			size++;
 			return true;
 		}
@@ -151,17 +154,17 @@ public class MyStack<T> implements StackInterface<T> {
 	public T[] toArray() {
 		
 		@SuppressWarnings("unchecked")
-		T[] array = (T[]) new Object[getMAX_CAPACITY()];
+		T[] array = (T[]) new Object[size()];
 		Node currentNode = topNode;
 		
-		int i = 4;
-		while((currentNode != null) && (i > 0)) {
+		int i = size - 1;
+		while((currentNode != null) && (i >= 0)) {
 			
 			array[i] = currentNode.getData();
 			
 			currentNode = currentNode.getNext();
 			i--;
-		}
+		}		
 		return array;
 	}
 	/**
